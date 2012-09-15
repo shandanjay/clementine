@@ -1,13 +1,38 @@
-# clementine
+# Clementine shop
 
-A Clojure library designed to ... well, that part is up to you.
+## Store core
 
-## Usage
+## Data model
 
-FIXME
+* __store__
+	* email
+	* name
+	* templates
+
+* __configuration__
+
+* __products__
+
+* __categories__
+
+* __customers__
+
+* __order__
+	* number
+	* customer
+	* date_purchased
+	* last_modified
+	* payment_method
+
+* __order_line_items__
+
+* __cart__
+
+* __cart_line_items__
+
+* coupons
+
 
 ## License
 
-Copyright © 2012 FIXME
-
-Distributed under the Eclipse Public License, the same as Clojure.
+Copyright &copy; 2012 Cafe

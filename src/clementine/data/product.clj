@@ -10,7 +10,7 @@
                    :sku (:sku product)
                    :description (:description product)
                    :slug (:slug product)
-                   :price (:price product)})))
+                   :price (Float/parseFloat (:price product))})))
 
 (defn find-all []
   (select products))
@@ -18,6 +18,10 @@
 (defn find-by-slug [slug]
   (select products
     (where {:slug slug})))
+
+(defn find-by-id [id]
+  (select products
+    (where {:id (Integer/parseInt id)})))
 
 (defn delete! [id]
   (delete products

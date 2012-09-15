@@ -1,0 +1,20 @@
+<form action="/admin/products/" method="post">
+	<fieldset>
+		<legend>Información del producto</legend>
+		<label for="name">Nombre</label>
+		<input name="product[name]" value="" placeholder="Nombre del producto">
+		<label for="sku">SKU</label>
+		<input name="product[sku]" value="" placeholder="SKU">
+		<label for="slug">Identificador del URL</label>
+		<input name="product[slug]" value="" placeholder="URL">
+		<label for="description">Descripción</label>
+		<textarea name="product[description]" placeholder="Escribe una descripción corta del producto">
+		</textarea>
+		<label for="price">Precio</label>
+		<input name="product[price]" value="" placeholder="Precio de venta">
+	</fieldset>
+	<div class="form-actions">
+		<button type="submit" class="btn btn-primary">Crear</button>
+		<a href="#" class="btn">Cancelar</a>
+	</div>
+</form>

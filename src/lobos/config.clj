@@ -16,8 +16,8 @@
 (def db
   {:classname "org.postgresql.Driver"
    :subprotocol "postgresql"
-   :user "eraad"
-   :password "pico2050"
+   :user "postgres"
+   :password "postgresdb"
    :subname "//localhost:5432/clementine"})
 
 (open-global-when-necessary db)

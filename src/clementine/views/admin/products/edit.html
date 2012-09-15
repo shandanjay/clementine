@@ -1,0 +1,21 @@
+<h1>Editando producto</h1>
+<form action="/admin/products/" method="post">
+	<fieldset>
+		<legend>Información del producto</legend>
+		<label for="name">Nombre</label>
+		<input id="name" name="product[name]" value="" placeholder="Nombre">
+		<label for="sku">SKU</label>
+		<input id="sku" name="product[sku]" value="" placeholder="SKU">
+		<label for="slug">Identificador del URL</label>
+		<input id="slug" name="product[slug]" value="" placeholder="URL">
+		<label for="description">Descripción</label>
+		<textarea id="description" name="product[description]" placeholder="Escribe una descripción corta del producto">
+		</textarea>
+		<label for="price">Precio</label>
+		<input id="price" name="product[price]" value="" placeholder="Precio de venta">
+	</fieldset>
+	<div class="form-actions">
+		<button type="submit" class="btn btn-primary">Guardar</button>
+		<a href="#" class="btn">Cancelar</a>
+	</div>
+</form>

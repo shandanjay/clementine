@@ -4,8 +4,8 @@
 (defn init []
   ;;(if (= "dev" (System/getenv "DATABASE_URL"))
     (def postgres-conf (postgres {:db "clementine"
-                                  :user "eraad"
-                                  :password "pico2050"}))
+                                  :user "postgres"
+                                  :password "postgresdb"}))
     ;;(def postgres-conf (postgres {:host "host=ec2-23-21-204-85.compute-1.amazonaws.com"
                                   ;;:port "5432"
                                   ;;:ssl "true"

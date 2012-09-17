@@ -20,6 +20,25 @@
                         (decimal :price))))
   (down [] (drop (table :products))))
 
+(defmigration add-customers-table
+  (up [] (create (table :customers
+                        (integer :id :primary-key :auto-inc)
+                        (varchar :name 80)
+                        (varchar :lastname 80)
+                        (varchar :email 200)
+                        (integer :role))))
+  (down [] (drop (table :customers))))
+
+(defmigration add-orders-table
+  (up [] (create (table :orders
+                        (integer :id :primary-key :auto-inc)
+                        (varchar :number 50)
+                        (integer :customer_id :not-null [:refer :customers :id])
+                        (timestamp :date_purchased (default (now)))
+                        (timestamp :last_modified :not-null)
+                        (integer :payment_method))))
+  (down [] (drop (table :orders))))
+
 ;;(defmigration add-products-table
   ;; code be executed when migrating the schema "up" using "migrate"
 ;; (up [] (create
@@ -32,3 +51,8 @@
 
 ;; Code to be executed when migrating schema "down" using "rollback"
 ;;(down [] (drop (table :products ))))
+
+(defn -main []
+  (println "Migrating database...") (flush)
+  (migrate)
+  (println "done!"))

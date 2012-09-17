@@ -1,4 +1,5 @@
 (ns lobos.config
+  (:require [clementine.util.config :as util])
   (:use lobos.connectivity))
 
 (defn open-global-when-necessary
@@ -14,10 +15,6 @@
     (@lobos.connectivity/global-connections :default-connection)))
 
 (def db
-  {:classname "org.postgresql.Driver"
-   :subprotocol "postgresql"
-   :user "eraad"
-   :password "pico2050"
-   :subname "//localhost:5432/clementine"})
+  (util/get-db-config))
 
 (open-global-when-necessary db)

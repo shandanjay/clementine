@@ -5,6 +5,7 @@
             [clementine.data.core :as data]))
 
 (defonce repl-server (start-server :port 7888))
+;; Initialize database connection
 (data/init)
 
 (defn -main [& m]

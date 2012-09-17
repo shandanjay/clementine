@@ -1,13 +1,14 @@
 # clementine
 
-A Clojure library designed to ... well, that part is up to you.
+Tienda online con catalogo, manejo de ordenes, registro de clientes y cupones.
 
 ## Usage
+Con leiningen 2.x.:
 
-FIXME
+    lein run
 
 ## License
 
-Copyright © 2012 FIXME
+Copyright © 2012 Eduardo Raad, Juan Antonio Plaza, Datilmedia S.A.
 
 Distributed under the Eclipse Public License, the same as Clojure.

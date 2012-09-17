@@ -2,7 +2,7 @@
   (:use [noir.core])
   (:require [net.cgrand.enlive-html :as html]))
 
-(def store {:title "Clementine"
+(def store {:title "Clementine - Personaliza lo que quieras"
             :meta-author "Juan Antonio Arguello, Valentina Ayala, Eduardo Raad y Cristina Villacres"
             :meta-description "Personaliza lo que quieras"
             :welcome-message "Hola Clementine"
@@ -28,12 +28,12 @@
   (html/set-attr :content (:meta-author store))
   [:meta (html/attr= (:name "description"))]
   (html/set-attr :content (:meta-description store))
-  [:div.sections-menu :ul :li]
+  [:.cafe-category]
   (html/clone-for [i (range 4)]
-                  [:li :a]
+                  [:.cafe-category :a]
                   (html/do->
-                   (html/content (:name ((:sections store) i)))
-                   (html/set-attr "href" (:uri ((:sections store) i)))))
+                   (html/content (:name ((:categories store) i)))
+                   (html/set-attr "href" (:uri ((:categories store) i)))))
   [:div.featured1 #{:.name}]
   (html/content (:name ((:featured store) 0)))
   [:div.featured1 #{:.description}]

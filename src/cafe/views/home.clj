@@ -1,4 +1,4 @@
-(ns clementine.views.home
+(ns cafe.views.home
   (:use [noir.core])
   (:require [net.cgrand.enlive-html :as html]))
 
@@ -19,7 +19,7 @@
                         :image "/img/picantes.png"}]
             :products [{}]})
 
-(def layout-template-url (new java.net.URL "http://localhost:8080/templates/layout.html"))
+(def layout-template-url (new java.net.URL "http://localhost:5000/templates/layout.html"))
 
 (html/deftemplate layout layout-template-url [store]
   [:title]

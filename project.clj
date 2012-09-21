@@ -1,4 +1,4 @@
-(defproject clementine "0.1.0-SNAPSHOT"
+(defproject cafe "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
@@ -10,4 +10,4 @@
                  [korma "0.3.0-beta7"]
                  [postgresql "9.0-801.jdbc4"]
                  [lobos "1.0.0-SNAPSHOT"]]
-  :main clementine.core)
+  :main cafe.core)

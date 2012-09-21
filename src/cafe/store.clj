@@ -1,4 +1,4 @@
-(ns clementine.store)
+(ns cafe.store)
 
 (def store {:title "Clementine - Personaliza lo que quieras"
             :meta-author "Juan Antonio Arguello, Valentina Ayala, Eduardo Raad y Cristina Villacres"

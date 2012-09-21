@@ -1,4 +1,4 @@
-(ns clementine.data.category
+(ns cafe.data.category
   (:use [korma.db]
         [korma.core]))
 

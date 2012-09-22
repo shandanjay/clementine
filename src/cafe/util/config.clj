@@ -1,5 +1,5 @@
-(ns clementine.util.config
-	(:require [clojure.string :as str])
+(ns cafe.util.config
+        (:require [clojure.string :as str])
   (:import (java.net URI)))
 
 (defn parse-db-url
@@ -17,6 +17,6 @@
 
 ;; @TODO: Should validate existence of DATABASE_URL environment variable
 (defn get-db-config "Builds a JDBC driver config map" []
-	(merge {:classname "org.postgresql.Driver"
+        (merge {:classname "org.postgresql.Driver"
           :subprotocol "postgresql"}
          (parse-db-url "DATABASE_URL")))

@@ -1,1 +1,1 @@
-web: lein run -m clementine.core
+web: lein run -m cafe.core

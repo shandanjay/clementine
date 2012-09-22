@@ -1,4 +1,4 @@
-(ns clementine.data.order
+(ns cafe.data.order
   (:use [korma.db]
         [korma.core]))
 

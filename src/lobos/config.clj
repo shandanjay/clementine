@@ -1,5 +1,5 @@
 (ns lobos.config
-  (:require [clementine.util.config :as util])
+  (:require [cafe.util.config :as util])
   (:use lobos.connectivity))
 
 (defn open-global-when-necessary

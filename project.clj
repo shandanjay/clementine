@@ -1,6 +1,6 @@
-(defproject cafe "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
+(defproject cafe "0.0.1-SNAPSHOT"
+  :description "E-commerce platform powered by Clojure"
+  :url "http://cafecommerce.com"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :min-lein-version "2.0.0"
@@ -11,4 +11,5 @@
                  [korma "0.3.0-beta7"]
                  [postgresql "9.0-801.jdbc4"]
                  [lobos "1.0.0-SNAPSHOT"]]
+  :plugins [[lein-marginalia "0.7.1"]]
   :main cafe.core)

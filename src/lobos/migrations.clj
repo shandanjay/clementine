@@ -2,7 +2,7 @@
   (:refer-clojure :exclude [alter drop bigint boolean char double float time])
   (:use (lobos [migration :only [defmigration]] core schema) lobos.config))
 
-(defmigration properties
+(defmigration create-table-properties
   (up []
       (create
        (table :properties
@@ -11,10 +11,9 @@
               (varchar :description 100 :not-null)
               (varchar :value 100 :not-null))))
   (down []
-        (drop
-         (table :properties))))
+        (drop (table :properties))))
 
-(defmigration categories
+(defmigration create-table-categories
   (up [] (create (table :categories
                         (integer :id :primary-key :auto-inc)
                         (varchar :slug 100 :not-null)
@@ -22,7 +21,7 @@
                         (varchar :description 255 :not-null))))
   (down [] (drop (table :categories))))
 
-(defmigration products
+(defmigration create-table-products
   (up [] (create (table :products
                         (integer :id :primary-key :auto-inc)
                         (varchar :sku 100)
@@ -32,24 +31,84 @@
                         (decimal :price))))
   (down [] (drop (table :products))))
 
-(defmigration add-customers-table
-  (up [] (create (table :customers
+(defmigration create-table-users
+  (up [] (create (table :users
                         (integer :id :primary-key :auto-inc)
                         (varchar :name 80)
                         (varchar :lastname 80)
                         (varchar :email 200)
+                        (varchar :password 64)
                         (integer :role))))
-  (down [] (drop (table :customers))))
+  (down [] (drop (table :users))))
 
-(defmigration add-orders-table
-  (up [] (create (table :orders
+(defmigration create-table-countries
+  (up [] (create (table :countries
                         (integer :id :primary-key :auto-inc)
-                        (varchar :number 50)
-                        (integer :customer_id :not-null [:refer :customers :id])
-                        (timestamp :date_purchased (default (now)))
-                        (timestamp :last_modified :not-null)
-                        (integer :payment_method))))
+                        (varchar :name 50)
+                        (char :iso 2)
+                        (char :iso3 3)
+                        (integer :numcode))))
+  (down [] (drop (table :countries))))
+
+(defmigration create-table-provinces
+  (up []
+    (create
+      (table :provinces
+        (integer :country_id :not-null [:refer :countries :id])
+        (varchar :iso 2)
+        (varchar :name 50)
+        (integer :id :primary-key :auto-inc))))
+  (down [] (drop (table :provinces))))
+
+(defmigration create-table-addresses
+  (up [] (create (table :addresses
+                        (integer :id :primary-key :auto-inc)
+                        (varchar :firstname 50)
+                        (varchar :lastname 50)
+                        (varchar :address1 100)
+                        (varchar :address2 100)
+                        (varchar :suburb 50)
+                        (varchar :postcode 10)
+                        (varchar :city 30)
+                        (integer :country_id :not-null [:refer :countries :id])
+                        (integer :province_id :not-null [:refer :provinces :id])
+                        (varchar :phone 10)
+                        (timestamp :created_at (default (now)))
+                        (timestamp :updated_at (default (now))))))
+  (down [] (drop (table :addresses))))
+
+(defmigration create-table-status
+  (up [] (create (table :status
+                        (integer :id :primary-key :auto-inc)
+                        (varchar :name 20)
+                        (varchar :machine_readable 20))))
+  (down [] (drop (table :status))))
+
+(defmigration create-table-orders
+  (up []
+    (create
+      (table :orders
+        (timestamp :date_purchased (default (now)))
+        (timestamp :last_modified (default (now)))
+        (text :special_instructions)
+        (integer :status_id :not-null [:refer :status :id])
+        (integer :billing_address_id :not-null [:refer :addresses :id])
+        (integer :shipping_address_id :not-null [:refer :addresses :id])
+        (decimal :total 10 4)
+        (integer :user_id :not-null [:refer :users :id])
+        (integer :id :primary-key :auto-inc))))
   (down [] (drop (table :orders))))
+
+(defmigration create-table-line-items
+  (up [] (create (table :line_items
+                        (integer :id :primary-key :auto-inc)
+                        (integer :quantity)
+                        (decimal :price 10 4 [:not-null])
+                        (integer :product_id :not-null [:refer :products :id])
+                        (integer :order_id :not-null [:refer :orders :id])
+                        (timestamp :created_at (default (now)))
+                        (timestamp :updated_at (default (now))))))
+  (down [] (drop (table :line_items))))
 
 ;;(defmigration add-products-table
   ;; code be executed when migrating the schema "up" using "migrate"
@@ -66,5 +125,8 @@
 
 (defn -main []
   (println "Migrating database...") (flush)
+  (println "rollback")
+  (rollback :all)
+  (println "migrate")
   (migrate)
   (println "done!"))

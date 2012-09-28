@@ -16,7 +16,7 @@ Using leiningen 2.x:
 
 Using foreman:
 
-	foreman start -e development.env
+  foreman start -e development.env
 
 _Where **development.env** contains the declaration for the DATABASE\_URL_
 

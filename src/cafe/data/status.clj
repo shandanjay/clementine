@@ -5,5 +5,5 @@
 (defentity status)
 
 (defn add [new-status]
-	(insert status
-		(values new-status)))
+  (insert status
+    (values new-status)))

@@ -3131,68 +3131,73 @@ net.brehaut.ClojureTools = (function (SH) {
        images text[],
        categories text[])&quot;))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn delete-products-table []
-  (exec-raw &quot;DROP TABLE products&quot;))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#cafe.data.order" name="cafe.data.order"><h1 class="project-name">cafe.data.order</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+  (exec-raw &quot;DROP TABLE products&quot;))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#cafe.data.order" name="cafe.data.order"><h1 class="project-name">cafe.data.order</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>Orders</h2>
+
+<p>Orders business logic. An order groups all the information related to a
+purchase in the store. Products (line items), billing address, payments,
+shipping address, shipments.</p>
 </td><td class="codes"><pre class="brush: clojure">(ns cafe.data.order
   (:use [korma.db]
         [korma.core])
   (:require [cafe.data.user :as users]
-  					[cafe.data.address :as address]
-  					[cafe.data.status :as status]))</pre></td></tr><tr><td class="docs">
+            [cafe.data.address :as address]
+            [cafe.data.status :as status]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(declare prepare-input)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defentity line_items)
 (defentity payments)
-(defentity shipments)</pre></td></tr><tr><td class="docs"><h3>Orders table</h3>
+(defentity shipments)</pre></td></tr><tr><td class="docs"><h3>Orders table fields:</h3>
 
-<p>id <em>integer</em>
-customer<em>id _integer</em>
-billing<em>address</em>id <em>integer</em>
-shipping<em>address</em>id <em>integer</em>
-date<em>purchased _datetime</em>
-last<em>modified _datetime</em>
-total <em>decimal</em>
-status<em>id _integer</em>
-special<em>instructions _varchar</em>
-shipping<em>method</em>id <em>integer</em></p>
+<ul>
+<li>id <em>integer</em></li>
+<li>customer_id <em>integer</em></li>
+<li>billing<em>address</em>id <em>integer</em></li>
+<li>shipping<em>address</em>id <em>integer</em></li>
+<li>date<em>purchased _datetime</em></li>
+<li>last<em>modified _datetime</em></li>
+<li>total <em>decimal</em></li>
+<li>status<em>id _integer</em></li>
+<li>special<em>instructions _varchar</em></li>
+<li>shipping<em>method</em>id <em>integer</em></li>
+</ul>
 </td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defentity orders
-	(table :orders)
-	(has-many line_items {:fk :order_id})
-	(has-many payments {:fk :order_id})
-	(has-many shipments {:fk :order_id})
-	(belongs-to status/status)
-	(belongs-to users/users {:fk :user_id}))</pre></td></tr><tr><td class="docs"><h2>Data store functions</h2>
+  (table :orders)
+  (has-many line_items {:fk :order_id})
+  (has-many payments {:fk :order_id})
+  (has-many shipments {:fk :order_id})
+  (belongs-to status/status)
+  (belongs-to users/users {:fk :user_id}))</pre></td></tr><tr><td class="docs"><h2>Data store functions</h2>
 </td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn insert-items [order-id items]
-	(insert line_items
-		(values (map #(assoc % :order_id order-id) items))))</pre></td></tr><tr><td class="docs">
+  (insert line_items
+    (values (map #(assoc % :order_id order-id) items))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn create [new-order]
-	(-&gt;
-		(:id (insert orders
-    	(values (prepare-input new-order))))
-		(insert-items (:line-items new-order))))</pre></td></tr><tr><td class="docs">
+  (-&gt;
+    (:id (insert orders
+      (values (prepare-input new-order))))
+    (insert-items (:line-items new-order))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn update-total [order]
-	(update orders
-					(set-fields {	:total (:total order)
-												:updated_at &quot;NOW()&quot;})
-					(where {:id (:id order)})))</pre></td></tr><tr><td class="docs">
+  (update orders
+          (set-fields { :total (:total order)
+                        :updated_at &quot;NOW()&quot;})
+          (where {:id (:id order)})))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn update-status [order status-id]
-	(update orders
-					(set-fields {:status_id status-id})
-					(where {:id (:id order)})))</pre></td></tr><tr><td class="docs">
+  (update orders
+          (set-fields {:status_id status-id})
+          (where {:id (:id order)})))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn find-all []
   (select orders))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn find-order [order-id]
   (select orders
-  	(with line_items)
-  	(where {:id [= order-id]})))</pre></td></tr><tr><td class="docs">
+    (with line_items)
+    (where {:id [= order-id]})))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn delete! [id]
   (delete orders
-          (where {:id id})))</pre></td></tr><tr><td class="docs"><p>Removes related entities and prepares the order map to be inserted in the DB</p>
-
-<h2>Private functions.</h2>
+          (where {:id id})))</pre></td></tr><tr><td class="docs"><h2>Private functions.</h2>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Removes related entities and prepares the order map to be inserted into the database</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- prepare-input
-	[order]
-	(dissoc order :line-items))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#cafe.data.product" name="cafe.data.product"><h1 class="project-name">cafe.data.product</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+  [order]
+  (dissoc order :line-items))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#cafe.data.product" name="cafe.data.product"><h1 class="project-name">cafe.data.product</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns cafe.data.product
   (:use [korma.db]
         [korma.core]))</pre></td></tr><tr><td class="docs">
@@ -3213,90 +3218,90 @@ shipping<em>method</em>id <em>integer</em></p>
   (delete products
           (where {:id id})))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#cafe.data.seeds" name="cafe.data.seeds"><h1 class="project-name">cafe.data.seeds</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns cafe.data.seeds
-	(:use [korma.core]
-				[korma.db])
-	(:require [cafe.data.core :as data]
-						[cafe.data.order :as orders]
-						[cafe.data.product :as products]
-						[cafe.data.user :as users]
-						[cafe.data.status :as status]
-						[cafe.data.address :as address]))</pre></td></tr><tr><td class="docs"><h1>Fixtures to test data functions</h1>
+  (:use [korma.core]
+        [korma.db])
+  (:require [cafe.data.core :as data]
+            [cafe.data.order :as orders]
+            [cafe.data.product :as products]
+            [cafe.data.user :as users]
+            [cafe.data.status :as status]
+            [cafe.data.address :as address]))</pre></td></tr><tr><td class="docs"><h1>Fixtures to test data functions</h1>
 </td><td class="codes"><pre class="brush: clojure">(def product-fixtures '(
-	{	:name &quot;Cafe Latte&quot;
-		:sku &quot;cl-123&quot;
-		:description &quot;Cafe con leche&quot;
-		:slug &quot;cafe-latte&quot;
-		:price 2.99}
-	{	:name &quot;Milkshake de Chocolate&quot;
-		:sku &quot;ms-456&quot;
-		:description &quot;Batido de leche con helado de chocolate&quot;
-		:slug &quot;milkshake-chocolate&quot;
-		:price 4.99}))</pre></td></tr><tr><td class="docs">
+  { :name &quot;Cafe Latte&quot;
+    :sku &quot;cl-123&quot;
+    :description &quot;Cafe con leche&quot;
+    :slug &quot;cafe-latte&quot;
+    :price 2.99}
+  { :name &quot;Milkshake de Chocolate&quot;
+    :sku &quot;ms-456&quot;
+    :description &quot;Batido de leche con helado de chocolate&quot;
+    :slug &quot;milkshake-chocolate&quot;
+    :price 4.99}))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def order-fixture
-	{:user_id 1
-	 :total 7.98
-	 ;:date_purchased &quot;2012-09-24 12:00&quot;
-	 ;:last_modified &quot;2012-09-24 12:00&quot;
-	 :billing_address_id 1
-	 :shipping_address_id 1
-	 :status_id 1
-	 :special_instructions &quot;Some instructions&quot;
-	 :line-items '(
-	 	{:product_id 1 :quantity 3 :price 2.99}
-	 	{:product_id 2 :quantity 1 :price 4.99})})</pre></td></tr><tr><td class="docs">
+  {:user_id 1
+   :total 7.98
+   ;:date_purchased &quot;2012-09-24 12:00&quot;
+   ;:last_modified &quot;2012-09-24 12:00&quot;
+   :billing_address_id 1
+   :shipping_address_id 1
+   :status_id 1
+   :special_instructions &quot;Some instructions&quot;
+   :line-items '(
+    {:product_id 1 :quantity 3 :price 2.99}
+    {:product_id 2 :quantity 1 :price 4.99})})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def user-fixture {
-	:name &quot;Juan Antonio&quot;
-	:lastname &quot;Plaza&quot;
-	:email &quot;jplazaarguello@gmail.com&quot;
-	:password &quot;12345678&quot;
-	:role 1})</pre></td></tr><tr><td class="docs">
+  :name &quot;Juan Antonio&quot;
+  :lastname &quot;Plaza&quot;
+  :email &quot;jplazaarguello@gmail.com&quot;
+  :password &quot;12345678&quot;
+  :role 1})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def address-fixture {
-	:firstname &quot;Juan Antonio&quot;
-	:lastname &quot;Plaza&quot;
-	:address1 &quot;Calle 9na Este #212&quot;
-	:suburb &quot;Kennedy Nueva&quot;
-	:city &quot;Guayaquil&quot;
-	:postcode &quot;EC090112&quot;
-	:province_id 1
-	:country_id 1})</pre></td></tr><tr><td class="docs">
+  :firstname &quot;Juan Antonio&quot;
+  :lastname &quot;Plaza&quot;
+  :address1 &quot;Calle 9na Este #212&quot;
+  :suburb &quot;Kennedy Nueva&quot;
+  :city &quot;Guayaquil&quot;
+  :postcode &quot;EC090112&quot;
+  :province_id 1
+  :country_id 1})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def countries-fixtures '(
-	{:name &quot;Ecuador&quot; :iso &quot;EC&quot; :iso3 &quot;ECU&quot; :numcode 283}
-	{:name &quot;United States&quot; :iso &quot;US&quot; :iso3 &quot;USA&quot; :numcode 700}))</pre></td></tr><tr><td class="docs">
+  {:name &quot;Ecuador&quot; :iso &quot;EC&quot; :iso3 &quot;ECU&quot; :numcode 283}
+  {:name &quot;United States&quot; :iso &quot;US&quot; :iso3 &quot;USA&quot; :numcode 700}))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def provinces-fixtures '(
-	{:name &quot;Guayas&quot; :iso &quot;G&quot; :country_id 1}
-	{:name &quot;Pichincha&quot; :iso &quot;P&quot; :country_id 1}
-	{:name &quot;Manabí&quot; :iso &quot;M&quot; :country_id 1}
-	{:name &quot;California&quot; :iso &quot;CA&quot; :country_id 2}
-	{:name &quot;Oregon&quot; :iso &quot;OR&quot; :country_id 2}
-	{:name &quot;Florida&quot; :iso &quot;FL&quot; :country_id 2}))</pre></td></tr><tr><td class="docs">
+  {:name &quot;Guayas&quot; :iso &quot;G&quot; :country_id 1}
+  {:name &quot;Pichincha&quot; :iso &quot;P&quot; :country_id 1}
+  {:name &quot;Manabí&quot; :iso &quot;M&quot; :country_id 1}
+  {:name &quot;California&quot; :iso &quot;CA&quot; :country_id 2}
+  {:name &quot;Oregon&quot; :iso &quot;OR&quot; :country_id 2}
+  {:name &quot;Florida&quot; :iso &quot;FL&quot; :country_id 2}))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def status-fixtures '(
-	{:name &quot;Pending&quot; :machine_readable &quot;pending&quot;}
-	{:name &quot;Processing&quot; :machine_readable &quot;procesing&quot;}
-	{:name &quot;On Hold&quot; :machine_readable &quot;on-hold&quot;}
-	{:name &quot;Assigned&quot; :machine_readable &quot;assigned&quot;}))</pre></td></tr><tr><td class="docs">
+  {:name &quot;Pending&quot; :machine_readable &quot;pending&quot;}
+  {:name &quot;Processing&quot; :machine_readable &quot;procesing&quot;}
+  {:name &quot;On Hold&quot; :machine_readable &quot;on-hold&quot;}
+  {:name &quot;Assigned&quot; :machine_readable &quot;assigned&quot;}))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn seed-db []
-	(println &quot;Rebuilding database...&quot;)
-	(print &quot;Seeding...&quot;)
-	(products/add (first product-fixtures))
-	(print &quot;.&quot;)
-	(products/add (last product-fixtures))
-	(print &quot;..&quot;)
-	(users/create user-fixture)
-	(print &quot;.&quot;)
-	(address/add-countries countries-fixtures)
-	(print &quot;..&quot;)
-	(address/add-provinces provinces-fixtures)
-	(print &quot;.&quot;)
-	(address/save address-fixture)
-	(print &quot;...&quot;)
-	(status/add status-fixtures)
-	(print &quot;..&quot;)
-	(orders/create order-fixture))
-	(println &quot;.&quot;)</pre></td></tr><tr><td class="docs">
+  (println &quot;Rebuilding database...&quot;)
+  (print &quot;Seeding...&quot;)
+  (products/add (first product-fixtures))
+  (print &quot;.&quot;)
+  (products/add (last product-fixtures))
+  (print &quot;..&quot;)
+  (users/create user-fixture)
+  (print &quot;.&quot;)
+  (address/add-countries countries-fixtures)
+  (print &quot;..&quot;)
+  (address/add-provinces provinces-fixtures)
+  (print &quot;.&quot;)
+  (address/save address-fixture)
+  (print &quot;...&quot;)
+  (status/add status-fixtures)
+  (print &quot;..&quot;)
+  (orders/create order-fixture))
+  (println &quot;.&quot;)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn -main []
-	(data/init)
-	(seed-db)
-	(println &quot;done!&quot;))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#cafe.data.status" name="cafe.data.status"><h1 class="project-name">cafe.data.status</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+  (data/init)
+  (seed-db)
+  (println &quot;done!&quot;))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#cafe.data.status" name="cafe.data.status"><h1 class="project-name">cafe.data.status</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns cafe.data.status
   (:use [korma.db]
         [korma.core]))</pre></td></tr><tr><td class="docs">

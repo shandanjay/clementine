@@ -5,10 +5,10 @@
 (defentity users)
 
 (defn create [new-customer]
-	(insert users
-		(values new-customer)))
+  (insert users
+    (values new-customer)))
 
 (defn update-field [user field new-value]
-	(update users
-		(set-fields {field new-value})
-		(where {:id [= (:id user)]})))
+  (update users
+    (set-fields {field new-value})
+    (where {:id [= (:id user)]})))

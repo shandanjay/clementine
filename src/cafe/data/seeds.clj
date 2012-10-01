@@ -35,12 +35,15 @@
     {:product_id 2 :quantity 1 :price 4.99}
    )})
 
+(def roles-fixtures '(
+  {:name "admin"}
+  {:name "user"}))
+
 (def user-fixture {
   :name "Juan Antonio"
   :lastname "Plaza"
   :email "jplazaarguello@gmail.com"
-  :password "12345678"
-  :role 1})
+  :password "12345678"})
 
 (def address-fixture {
   :firstname "Juan Antonio"
@@ -75,6 +78,7 @@
   (products/add (first product-fixtures))
   (products/add (last product-fixtures))
   (users/create user-fixture)
+  (users/add-roles roles-fixtures)
   (address/add-countries countries-fixtures)
   (address/add-provinces provinces-fixtures)
   (address/save address-fixture)

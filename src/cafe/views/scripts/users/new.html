@@ -1,0 +1,15 @@
+<h1>Crea tu cuenta</h1>
+<form method="post" action="/users">
+  <fieldset>
+    <legend>Información personal</legend>
+    <label for="user-name">Nombre:</label>
+    <input id="user-name" name="user[name]" type="text">
+    <label for="user-email">Correo electrónico:</label>
+    <input id="user-email" name="user[email]" type="email">
+    <label for="user-email">Contraseña:</label>
+    <input id="user-password" name="user[password]" type="password">
+    <div>
+      <button type="submit" class="btn btn-primary">Crear cuenta</button>
+    </div>
+  </fieldset>
+</form>

@@ -28,3 +28,7 @@ div.logo {
     color: white;
     font-weight: bold;
 }
+
+.hiden{
+    display: none;
+}

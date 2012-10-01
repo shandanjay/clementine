@@ -31,15 +31,45 @@
                         (decimal :price))))
   (down [] (drop (table :products))))
 
+(defmigration create-table-roles
+  (up []
+    (create
+      (table :roles
+        (integer :id :primary-key :auto-inc)
+        (varchar :name 16))))
+  (down [] (drop (table :roles))))
+
 (defmigration create-table-users
   (up [] (create (table :users
                         (integer :id :primary-key :auto-inc)
                         (varchar :name 80)
                         (varchar :lastname 80)
                         (varchar :email 200)
-                        (varchar :password 64)
-                        (integer :role))))
+                        (varchar :password 128)
+                        (varchar :password_salt 128)
+                        (nchar :authentication_token)
+                        (varchar :current_sign_in_ip 39)
+                        (varchar :last_sign_in_ip 39)
+                        (varchar :password_salt 128)
+                        (integer :sign_in_count :not-null (default 0))
+                        (integer :failed_attempts :not-null (default 0))
+                        (timestamp :current_sign_in_at)
+                        (timestamp :last_sign_in_at)
+                        (timestamp :last_request_at)
+                        (timestamp :reset_password_sent_at)
+                        (timestamp :created_at (default (now)))
+                        (timestamp :updated_at (default (now)))
+                        (unique [:email]))))
   (down [] (drop (table :users))))
+
+(defmigration create-table-roles-users
+  (up []
+    (create
+      (table :roles_users
+        (integer :user_id :not-null [:refer :users :id])
+        (integer :role_id :not-null [:refer :roles :id])
+        (primary-key [:user_id :role_id]))))
+  (down [] (drop (table :roles_users))))
 
 (defmigration create-table-countries
   (up [] (create (table :countries
@@ -125,8 +155,8 @@
 
 (defn -main []
   (println "Migrating database...") (flush)
-  (println "rollback")
+  (println "rolling back")
   (rollback :all)
-  (println "migrate")
+  (println "migrating")
   (migrate)
   (println "done!"))

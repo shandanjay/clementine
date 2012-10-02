@@ -1,0 +1,55 @@
+categories:
+  # Parent categories
+  - name: "Baby Shower"
+    description: "Todo para celebrar a tu bebe"
+    uri: "baby-shower"
+
+  - name: "Aniversarios"
+    description: "Disfruta las fechas especiales"
+    uri: "aniversarios"
+
+  - name: "Bautizos"
+    description: "El momento mas importante de tu bebe"
+    uri: "bautizos"
+
+  - name: "Cumpleanos"
+    description: "Regala algo especial"
+    uri: "cumpleanos"
+
+  # Children categories
+  #- name: "Chloe"
+  #  description: "Fresca e independiente"
+  #  uri: "chloe"
+  #  parent_id: 1
+
+  #- name: "Vicky"
+  #  description: "Inocente"
+  #  uri: "vicky"
+  #  parent_id: 1
+
+  #- name: "Thomas"
+  #  description: "El primogenito"
+  #  uri: "thomas"
+  #  parent_id: 1
+
+  #- name: "Jane"
+  #  description: "La gringa"
+  #  uri: "jane"
+  #  parent_id: 1
+
+  #- name: "Kyle"
+  #  description: "Como southpark"
+  #  uri: "kyle"
+  #  parent_id: 1
+
+  #- name: "Nicholas"
+  #  description: "Directo de UK"
+  #  uri: "nicholas"
+  #  parent_id: 1
+
+products:
+  - sku: "111"
+    name: "Sticker"
+    description: "Eco-amigable"
+    uri: "sticker"
+    price: 1.99

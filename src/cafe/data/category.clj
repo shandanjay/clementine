@@ -4,17 +4,29 @@
 
 (defentity categories)
 
-(defn add [name slug description]
+(defn add-category [category]
   (insert categories
-    (values {:name name :slug slug :description description})))
+          (values {:name (:name category)
+                   :description (:description category)
+                   :uri (:uri category)
+                   :parent_id (:parent_id category)})))
 
-(defn find-all []
-  (select categories))
+(defn add-categories [category-list]
+  (insert categories
+          (values category-list)))
 
-(defn find [slug]
+(defn find-categories []
   (select categories
-    (where {:slug slug})))
+          (limit 10)))
 
-(defn delete! [id]
+(defn get-category [id]
+  (select categories
+          (where {:id id})))
+
+(defn get-children-categories [id]
+  (select categories
+           (where {:parent_id id})))
+
+(defn delete-category [id]
   (delete categories
           (where {:id id})))

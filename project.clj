@@ -10,6 +10,7 @@
                  [enlive "1.0.1"]
                  [korma "0.3.0-beta7"]
                  [postgresql "9.0-801.jdbc4"]
-                 [lobos "1.0.0-SNAPSHOT"]]
+                 [lobos "1.0.0-SNAPSHOT"]
+                 [clj-yaml "0.4.0"]]
   :plugins [[lein-marginalia "0.7.1"]]
   :main cafe.core)
